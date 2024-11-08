@@ -3,16 +3,25 @@ import Result "mo:base/Result";
 module Types {
     //Definir la estructura del tipo de dato Movie
     public type Movie = {
-        id: Principal;
+        id: Nat;
         title: Text;
-        description: Text;
-        cost: Nat;
+        year: Nat;
+        director: Text;
+        price: Float;
     };
 
     //Definir la estructura para una Review
     type Review = {
         user: Text;
         rating: Nat;
+        comment: Text;
+    };
+
+    //Definir la estructura del tipo de dato Usuario
+    public type User = {
+        id: Principal;
+        name: Text;
+        lastname: Text;
     };
 
     //Type personalizado para el result. Dos Result, el primero es el módulo Result, y el 2o un type dentro del módulo
