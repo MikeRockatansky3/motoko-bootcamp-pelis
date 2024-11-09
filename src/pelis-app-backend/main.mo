@@ -12,6 +12,24 @@ actor PeliStore {
     
     // Mapa para almacenar películas
     var movies = Map.new<Text, Types.Movie>();
+
+    // Función para verificar si una película existe
+    public shared query func checkMovie(id: Nat) : async Bool {
+        //func has<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): Bool
+        return Map.has(movies, thash, Nat.toText(id));
+    };
+
+    // Función para comprar una película
+    public shared query func buyMovie(id: Nat) : async ?Types.Movie {
+        // func get<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): ?V
+        return Map.get(movies, thash, Nat.toText(id)): ?Types.Movie;
+    };
+
+    // Función para obtener todas las películas
+    public shared query func getMovies() : async [(Text, Types.Movie)] {
+        var moviesArray = Map.toArray(movies): [(Text, Types.Movie)];
+        return moviesArray;
+    };
     
     // Mapa para almacenar puntuaciones (0-10)
     //stable var reviews : TrieMap<Text, [Review]> = TrieMap();
@@ -19,6 +37,7 @@ actor PeliStore {
     // Función para agregar una nueva película
     public shared func addMovie(data: Types.Movie) : () {
         //Método set para añadir un registro al mapa moviesMap
+        //func set<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K, value: V): ()
         Map.set(movies, thash, Nat.toText(data.id), data);
     };
 
@@ -28,24 +47,16 @@ actor PeliStore {
         //Map.delete(mapa a trabajar, referencia del hash util, key);
         Map.delete(movies, thash, Nat.toText(id));
     };
-    /*
-    // Función para comprar una película
-    public shared(msg) func buyMovie(id: Text) : async ?Movie {
-        return movies.get(id);
-    };
-    */
+    
 }
 
-// Hacer stable el hashmap (con mops map) v
-// Separar los types en su propio archivo individual v
+// Hacer stable el hashmap (con mops map) ✓
+// Separar los types en su propio archivo individual ✓
 
-// Validaciones para eliminar una película
-// Función para consultar una película específica
-// Función para obtener todos los registros de películas
+// Función para consultar una película específica ✓
+// Función para obtener todos los registros de películas ✓
 
 // Agregar el mapa para almacenar reseñas
 // Función para agregar una reseña a una película
-// Función para ver el promedio de reseñas de una película (y maybe otra info de la peli)
-// ? Autenticación de usuarios
-
-
+// Función para ver el promedio de reseñas de una película
+// Tal vez integrar autenticación de usuarios?
