@@ -1,6 +1,6 @@
 //Importar módulos base
 import Text "mo:base/Text";
-import _Principal "mo:base/Principal";
+import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
 //Importar módulos de Mops
 import Map "mo:map/Map";
@@ -13,16 +13,32 @@ actor PeliStore {
     // Mapa para almacenar películas
     var movies = Map.new<Text, Types.Movie>();
 
-    // Función para verificar si una película existe
-    public shared query func checkMovie(id: Nat) : async Bool {
-        //func has<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): Bool
-        return Map.has(movies, thash, Nat.toText(id));
+    // Mapa para almacenar reseñas
+    var reviews = Map.new<Text, Types.Review>();
+
+    //Función para agregar una reseña a una película
+    public shared func reviewMovie(data: Types.Review) : () {
+        //Método set para añadir un registro al mapa reviews
+        //func set<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K, value: V): ()
+        Map.set(reviews, thash, Nat.toText(data.id_review), data);
     };
 
     // Función para comprar una película
-    public shared query func buyMovie(id: Nat) : async ?Types.Movie {
+    public shared query ({caller}) func buyMovie(id: Nat) : async Types.BuyMovieResult {
+        if(Principal.isAnonymous(caller)) {
+            //return []; //Si el usuario no está utenticado regresa un array vacío
+            return #err("Debes estar autenticado para ver los usuarios"); //Regresar un mensaje en vez de un array vacío
+        };
+
+        //func has<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): Bool
+        var exists = Map.has(movies, thash, Nat.toText(id));
+
+        if(exists == false) {
+            return #err("La película con el ID " # Nat.toText(id) # " no existe.");
+        };
+
         // func get<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): ?V
-        return Map.get(movies, thash, Nat.toText(id)): ?Types.Movie;
+        return #ok(Map.get(movies, thash, Nat.toText(id)): ?Types.Movie);
     };
 
     // Función para obtener todas las películas
@@ -31,19 +47,17 @@ actor PeliStore {
         return moviesArray;
     };
     
-    // Mapa para almacenar puntuaciones (0-10)
-    //stable var reviews : TrieMap<Text, [Review]> = TrieMap();
-    
     // Función para agregar una nueva película
     public shared func addMovie(data: Types.Movie) : () {
-        //Método set para añadir un registro al mapa moviesMap
+        //Método set para añadir un registro al mapa movies
         //func set<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K, value: V): ()
         Map.set(movies, thash, Nat.toText(data.id), data);
+        
     };
 
     // Función para eliminar una película
     public shared func delMovie(id: Nat) : () {
-        //Método delete para añadir un registro al mapa moviesMap
+        //Método delete para añadir un registro al mapa movies
         //Map.delete(mapa a trabajar, referencia del hash util, key);
         Map.delete(movies, thash, Nat.toText(id));
     };
@@ -56,7 +70,7 @@ actor PeliStore {
 // Función para consultar una película específica ✓
 // Función para obtener todos los registros de películas ✓
 
-// Agregar el mapa para almacenar reseñas
-// Función para agregar una reseña a una película
+// Agregar el mapa para almacenar reseñas ✓
+// Función para agregar una reseña a una película ✓
 // Función para ver el promedio de reseñas de una película
 // Tal vez integrar autenticación de usuarios?

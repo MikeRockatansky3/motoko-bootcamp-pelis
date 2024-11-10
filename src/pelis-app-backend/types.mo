@@ -11,10 +11,10 @@ module Types {
     };
 
     //Definir la estructura para una Review
-    type Review = {
-        user: Text;
-        rating: Nat;
-        comment: Text;
+    public type Review = {
+        id_review: Nat;
+        id_movie: Nat;
+        stars: Nat;
     };
 
     //Definir la estructura del tipo de dato Usuario
@@ -25,6 +25,7 @@ module Types {
     };
 
     //Type personalizado para el result. Dos Result, el primero es el módulo Result, y el 2o un type dentro del módulo
-    //El tipo espera dos parámetros, uno para cuando todo está bien y otro cuando algo sale mal.
-    public type GetMoviesResult = Result.Result<[Types.Movie], Text>;
+    //Si una película existe, devolver el promedio de sus stars, sino devolver un mensaje de texto al usuario.
+    public type BuyMovieResult = Result.Result< ?Movie, Text>;
+    public type GetReviewsResult = Result.Result<[(Text, Review)], Text>;
 };
