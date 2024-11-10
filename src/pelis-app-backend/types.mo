@@ -14,7 +14,7 @@ module Types {
     public type Review = {
         id_review: Nat;
         id_movie: Nat;
-        stars: Nat;
+        stars: Float;
     };
 
     //Definir la estructura del tipo de dato Usuario

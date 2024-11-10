@@ -26,17 +26,20 @@ actor PeliStore {
     // Función para comprar una película
     public shared query ({caller}) func buyMovie(id: Nat) : async Types.BuyMovieResult {
         if(Principal.isAnonymous(caller)) {
-            //return []; //Si el usuario no está utenticado regresa un array vacío
-            return #err("Debes estar autenticado para ver los usuarios"); //Regresar un mensaje en vez de un array vacío
+            //Si el usuario no está utenticado regresa un mensaje de texto
+            return #err("Debes estar autenticado para ver los usuarios");
         };
 
+        //Ahora validamos que la película exista con la funcion has
         //func has<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): Bool
         var exists = Map.has(movies, thash, Nat.toText(id));
 
         if(exists == false) {
+            //Si la película no existe decirselo al usuario
             return #err("La película con el ID " # Nat.toText(id) # " no existe.");
         };
 
+        //Si se cumplieron las validaciones anteriores, se procede con la compra
         // func get<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): ?V
         return #ok(Map.get(movies, thash, Nat.toText(id)): ?Types.Movie);
     };
