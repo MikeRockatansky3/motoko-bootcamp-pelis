@@ -1,4 +1,5 @@
 import Result "mo:base/Result";
+import Nat "mo:base/Nat";
 
 module Types {
     //Definir la estructura del tipo de dato Movie

@@ -23,6 +23,27 @@ actor PeliStore {
         Map.set(reviews, thash, Nat.toText(data.id_review), data);
     };
 
+    //Función para ver las reseñas
+    public shared query ({caller}) func getReviews(id: Nat) : async Types.GetReviewsResult {
+
+        if(Principal.isAnonymous(caller)) {
+            //return []; //Si el usuario no está utenticado regresa un array vacío
+            return #err("Debes estar autenticado para ver las reseñas"); //Regresar un mensaje en vez de un array vacío
+        };
+
+        //func has<K, V>(map: Map<K, V>, hashUtils: HashUtils<K>, key: K): Bool
+        var exists = Map.has(movies, thash, Nat.toText(id));
+
+        if(exists == false) {
+            return #err("La película con el ID " # Nat.toText(id) # " no existe.");
+        };
+
+        var reviewsArray = Map.toArray(reviews): [(Text, Types.Review)];
+        return #ok(reviewsArray);
+
+    };
+
+
     // Función para comprar una película
     public shared query ({caller}) func buyMovie(id: Nat) : async Types.BuyMovieResult {
         if(Principal.isAnonymous(caller)) {
