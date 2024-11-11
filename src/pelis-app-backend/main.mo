@@ -48,7 +48,7 @@ actor PeliStore {
     public shared query ({caller}) func buyMovie(id: Nat) : async Types.BuyMovieResult {
         if(Principal.isAnonymous(caller)) {
             //Si el usuario no está utenticado regresa un mensaje de texto
-            return #err("Debes estar autenticado para ver los usuarios");
+            return #err("Debes estar autenticado para ver las películas");
         };
 
         //Ahora validamos que la película exista con la funcion has
