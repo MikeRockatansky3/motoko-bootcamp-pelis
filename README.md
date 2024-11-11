@@ -27,7 +27,7 @@ Abrir la carpeta del proyecto
 cd pelis-app
 ```
 
-Levantar la réplica
+Levantar la réplica de fondo
 
 ```bash
 dfx start --background --clean

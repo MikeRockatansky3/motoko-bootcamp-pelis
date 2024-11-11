@@ -97,4 +97,4 @@ actor PeliStore {
 // Agregar el mapa para almacenar reseñas ✓
 // Función para agregar una reseña a una película ✓
 // Función para ver el promedio de reseñas de una película
-// Tal vez integrar autenticación de usuarios?
+// Tal vez integrar autenticación de usuarios ✓
